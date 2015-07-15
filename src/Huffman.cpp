@@ -5,8 +5,17 @@
 // author licences below
 //
 #include "Huffman.h"
-#include "JpegEncoder.h"
+//#include "JpegEncoder.h"
 
+/**
+ * prototype of the class to define jpegNaturalOrder, we can not include
+ * JpegEncoder because we have different implementations of it
+ */
+class JpegEncoder
+{
+public:
+    static int jpegNaturalOrder[];
+};
 
 #include <stdio.h>
 
