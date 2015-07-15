@@ -51,3 +51,8 @@ void BufferedOutputStream::write(byte data[], int offset, int len)
 	}
 }
 	
+
+void BufferedOutputStream::close()
+{
+    m_out->close();
+}
