@@ -21,7 +21,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <memory.h>
+//#include <memory.h>
+#include <string.h>
 
 #include "Image.h"
 
@@ -31,7 +32,7 @@ typedef unsigned char color;
 #pragma pack(push)
 #pragma pack(1)
 
-#define BITMAP_SIGNATURE 'MB'
+#define BITMAP_SIGNATURE ('M'<<8 | 'B')     // 'MB' 
 
 typedef __attribute__((aligned(1))) struct {
 	unsigned short int Signature;
@@ -153,18 +154,28 @@ public:
 
 		Dispose();
 		
-		if (file == 0) return false;
-		
+		if (file == 0) 
+                {
+                    printf("ERROR: file not found\n");
+                    return false;
+		}
+                
 		fread(&m_BitmapFileHeader, BITMAP_FILEHEADER_SIZE, 1, file);
-		if (m_BitmapFileHeader.Signature != BITMAP_SIGNATURE) {
-			return false;
+		if (m_BitmapFileHeader.Signature != BITMAP_SIGNATURE) 
+                {
+                    printf("ERROR: Bad signature %2X != %2X\n", m_BitmapFileHeader.Signature, BITMAP_SIGNATURE);
+                    return false;
 		}
 
 		fread(&m_BitmapHeader, sizeof(BITMAP_HEADER), 1, file);
 		
 		if (m_BitmapHeader.BitCount != 24)
-			return false;
-		if (m_BitmapHeader.Compression)
+                {
+                    printf("ERROR: bitcount %d\n", m_BitmapHeader.BitCount);
+                    return false;
+		}
+                
+                if (m_BitmapHeader.Compression)
 			return false;
 
 		m_Width = (m_BitmapHeader.Width < 0)? -m_BitmapHeader.Width: m_BitmapHeader.Width;
