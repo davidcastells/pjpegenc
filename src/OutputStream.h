@@ -15,6 +15,7 @@ public:
 	virtual void flush();
 	virtual void write(byte data[], int offset, int len);
 	virtual void write(int c) = 0; 
+        virtual void close() = 0;
 };
 
 

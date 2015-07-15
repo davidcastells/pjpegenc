@@ -5,6 +5,7 @@
 //
 #include "OutputStream.h"
 
+#include <stdio.h>
 
 	 void OutputStream::flush()
 	 {
@@ -12,6 +13,7 @@
 	 
 	 void OutputStream::write(byte data[], int offset, int len)
 	 {
+             printf("ERROR: not implemented\n");
 	 }
 	 
 

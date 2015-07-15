@@ -13,12 +13,13 @@ FileOutputStream::FileOutputStream(char* filename)
 FileOutputStream::~FileOutputStream()
 {
     flush();
-	fclose(m_fp);
+    close();
 }
 
 	
 void FileOutputStream::flush()
 {
+    if (m_fp != NULL)
 	fflush(m_fp);
 }
 
@@ -32,5 +33,12 @@ void FileOutputStream::write(int c)
     byte v = c;
 	
     fwrite(&v, 1, 1, m_fp);
+}
+
+void FileOutputStream::close()
+{
+    if (m_fp != NULL)
+        fclose(m_fp);
+    m_fp = NULL;
 }
 
