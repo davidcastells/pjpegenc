@@ -8,6 +8,7 @@
 #ifndef DCT_H_INCLUDED_
 #define DCT_H_INCLUDED_
 
+#include "globals.h"
 
 // This class incorporates quality scaling as implemented in the JPEG-6a
 // library.
@@ -30,19 +31,19 @@ public:
      int QUALITY;
 
      int quantum[2][N*N];
-     double Divisors[2][N*N];
+     BIGFP Divisors[2][N*N];
      
     /**
      * Quantitization Matrix for luminace.
      */
      int* quantum_luminance;
-     double* DivisorsLuminance;
+     BIGFP* DivisorsLuminance;
 
     /**
      * Quantitization Matrix for chrominance.
      */
      int* quantum_chrominance;
-     double* DivisorsChrominance;
+     BIGFP* DivisorsChrominance;
 
     /**
      * Constructs a new DCT object. Initializes the cosine transform matrix
@@ -80,25 +81,25 @@ private:
 // needs some tweaking.  If you get this part working, please let me know.
 
 public:
-	void forwardDCTExtreme(float input[N][N], double output[N][N]);
+	void forwardDCTExtreme(float input[N][N], BIGFP output[N][N]);
 
 
     /*
      * This method preforms a DCT on a block of image data using the AAN
      * method as implemented in the IJG Jpeg-6a library.
      */
-     void forwardDCT(float input[N][N], double output[N][N]);
+     void forwardDCT(float input[N][N], BIGFP output[N][N]);
 
     /*
     * This method quantitizes data and rounds it to the nearest integer.
     */
-     void quantizeBlock(double inputData[N][N], int code, int outputData[N*N] );
+     void quantizeBlock(BIGFP inputData[N][N], int code, int outputData[N*N] );
 
     /*
     * This is the method for quantizing a block DCT'ed with forwardDCTExtreme
     * This method quantitizes data anｄ rounds it to the nearest integer.
     */
-     void quantizeBlockExtreme(double inputData[N][N], int code, int outputData[N*N]);
+     void quantizeBlockExtreme(BIGFP inputData[N][N], int code, int outputData[N*N]);
 };
 
 #endif

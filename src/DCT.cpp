@@ -7,7 +7,10 @@
 
 #include "DCT.h"
 
+#include "globals.h"
+
 #include <math.h>
+#include <stdio.h>
 
 #define PI 3.14159265359
 
@@ -56,7 +59,8 @@
      */
     void DCT::initMatrix(int quality)
     {
-        double AANscaleFactor[] = { 1.0, 1.387039845, 1.306562965, 1.175875602,
+        
+        BIGFP AANscaleFactor[] = { 1.0, 1.387039845, 1.306562965, 1.175875602,
                                     1.0, 0.785694958, 0.541196100, 0.275899379};
         int i;
         int j;
@@ -64,6 +68,10 @@
         int Quality;
         int temp;
 
+        if (verbose)
+            printf("Initializing DCT with quality %d\n", quality);
+        
+        
 // converting quality setting to that specified in the jpeg_quality_scaling
 // method in the IJG Jpeg-6a C libraries
 
@@ -159,7 +167,7 @@
 // implemented.
 //                        DivisorsLuminance[index] = ((double) quantum_luminance[index]) << 3;
 // The divisors for the AAN method (the float method used in jpeg 6a library.
-                        DivisorsLuminance[index] = (double) ((double)1.0/((double) quantum_luminance[index] * AANscaleFactor[i] * AANscaleFactor[j] * (double) 8.0));
+                        DivisorsLuminance[index] = (BIGFP) ((BIGFP)1.0/((BIGFP) quantum_luminance[index] * AANscaleFactor[i] * AANscaleFactor[j] * (BIGFP) 8.0));
                         index++;
                 }
         }
@@ -247,7 +255,7 @@
 // implemented.
 //                        DivisorsChrominance[index] = ((double) quantum_chrominance[index]) << 3;
 // The divisors for the AAN method (the float method used in jpeg 6a library.
-                        DivisorsChrominance[index] = (double) ((double)1.0/((double) quantum_chrominance[index] * AANscaleFactor[i] * AANscaleFactor[j] * (double)8.0));
+                        DivisorsChrominance[index] = (BIGFP) ((BIGFP)1.0/((BIGFP) quantum_chrominance[index] * AANscaleFactor[i] * AANscaleFactor[j] * (BIGFP)8.0));
                         index++;
                 }
         }
@@ -265,11 +273,11 @@
 // For now the final output is unusable.  The associated quantization step
 // needs some tweaking.  If you get this part working, please let me know.
 
-    void DCT::forwardDCTExtreme(float input[8][8], double output[8][8])
+    void DCT::forwardDCTExtreme(float input[8][8], BIGFP output[8][8])
     {
-        double tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
-        double tmp10, tmp11, tmp12, tmp13;
-        double z1, z2, z3, z4, z5, z11, z13;
+        BIGFP tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
+        BIGFP tmp10, tmp11, tmp12, tmp13;
+        BIGFP z1, z2, z3, z4, z5, z11, z13;
         int i;
         int j;
         int v, u, x, y;
@@ -281,10 +289,10 @@
                         {
                                 for (y = 0; y < 8; y++) 
                                 {
-                                        output[v][u] += ((double)input[x][y])*cos(((double)(2*x + 1)*(double)u*PI)/(double)16)*cos(((double)(2*y + 1)*(double)v*PI)/(double)16);
+                                        output[v][u] += ((BIGFP)input[x][y])*cos(((BIGFP)(2*x + 1)*(BIGFP)u*PI)/(BIGFP)16)*cos(((BIGFP)(2*y + 1)*(BIGFP)v*PI)/(BIGFP)16);
                                 }
                         }
-                        output[v][u] *= (double)(0.25)*((u == 0) ? ((double)1.0/sqrt(2)) : (double) 1.0)*((v == 0) ? ((double)1.0/sqrt(2)) : (double) 1.0);
+                        output[v][u] *= (BIGFP)(0.25)*((u == 0) ? ((BIGFP)1.0/sqrt(2)) : (BIGFP) 1.0)*((v == 0) ? ((BIGFP)1.0/sqrt(2)) : (BIGFP) 1.0);
                 }
         }
     }
@@ -294,12 +302,12 @@
      * This method preforms a DCT on a block of image data using the AAN
      * method as implemented in the IJG Jpeg-6a library.
      */
-     void DCT::forwardDCT(float input[8][8], double output[8][8])
+     void DCT::forwardDCT(float input[8][8], BIGFP output[8][8])
     {
 //        double output[][] = new double[N][N];
-        double tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
-        double tmp10, tmp11, tmp12, tmp13;
-        double z1, z2, z3, z4, z5, z11, z13;
+        BIGFP tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
+        BIGFP tmp10, tmp11, tmp12, tmp13;
+        BIGFP z1, z2, z3, z4, z5, z11, z13;
         int i;
         int j;
 
@@ -308,7 +316,7 @@
         {
                 for(j = 0; j < 8; j++)
                 {
-                        output[i][j] = ((double)input[i][j] - (double)128.0);
+                        output[i][j] = ((BIGFP)input[i][j] - (BIGFP)128.0);
 //                        input[i][j] -= 128;
 
                 }
@@ -332,7 +340,7 @@
                 output[i][0] = tmp10 + tmp11;
                 output[i][4] = tmp10 - tmp11;
 
-                z1 = (tmp12 + tmp13) * (double) 0.707106781;
+                z1 = (tmp12 + tmp13) * (BIGFP) 0.707106781;
                 output[i][2] = tmp13 + z1;
                 output[i][6] = tmp13 - z1;
 
@@ -340,10 +348,10 @@
                 tmp11 = tmp5 + tmp6;
                 tmp12 = tmp6 + tmp7;
 
-                z5 = (tmp10 - tmp12) * (double) 0.382683433;
-                z2 = ((double) 0.541196100) * tmp10 + z5;
-                z4 = ((double) 1.306562965) * tmp12 + z5;
-                z3 = tmp11 * ((double) 0.707106781);
+                z5 = (tmp10 - tmp12) * (BIGFP) 0.382683433;
+                z2 = ((BIGFP) 0.541196100) * tmp10 + z5;
+                z4 = ((BIGFP) 1.306562965) * tmp12 + z5;
+                z3 = tmp11 * ((BIGFP) 0.707106781);
 
                 z11 = tmp7 + z3;
                 z13 = tmp7 - z3;
@@ -372,7 +380,7 @@
                 output[0][i] = tmp10 + tmp11;
                 output[4][i] = tmp10 - tmp11;
 
-                z1 = (tmp12 + tmp13) * (double) 0.707106781;
+                z1 = (tmp12 + tmp13) * (BIGFP) 0.707106781;
                 output[2][i] = tmp13 + z1;
                 output[6][i] = tmp13 - z1;
 
@@ -380,10 +388,10 @@
                 tmp11 = tmp5 + tmp6;
                 tmp12 = tmp6 + tmp7;
 
-                z5 = (tmp10 - tmp12) * (double) 0.382683433;
-                z2 = ((double) 0.541196100) * tmp10 + z5;
-                z4 = ((double) 1.306562965) * tmp12 + z5;
-                z3 = tmp11 * ((double) 0.707106781);
+                z5 = (tmp10 - tmp12) * (BIGFP) 0.382683433;
+                z2 = ((BIGFP) 0.541196100) * tmp10 + z5;
+                z4 = ((BIGFP) 1.306562965) * tmp12 + z5;
+                z3 = tmp11 * ((BIGFP) 0.707106781);
 
                 z11 = tmp7 + z3;
                 z13 = tmp7 - z3;
@@ -399,7 +407,7 @@
     /*
     * This method quantitizes data and rounds it to the nearest integer.
     */
-    void DCT::quantizeBlock(double inputData[8][8], int code, int outputData[64])
+    void DCT::quantizeBlock(BIGFP inputData[8][8], int code, int outputData[64])
     {
         int i, j;
         int index;
@@ -421,14 +429,14 @@
     * This is the method for quantizing a block DCT'ed with forwardDCTExtreme
     * This method quantitizes data anｄ rounds it to the nearest integer.
     */
-    void DCT::quantizeBlockExtreme(double inputData[8][8], int code, int outputData[64])
+    void DCT::quantizeBlockExtreme(BIGFP inputData[8][8], int code, int outputData[64])
     {
         int i, j;
         int index;
         index = 0;
         for (i = 0; i < 8; i++) {
                 for (j = 0; j < 8; j++) {
-                        outputData[index] = (int)(round(inputData[i][j] / (double)(quantum[code][index])));
+                        outputData[index] = (int)(round(inputData[i][j] / (BIGFP)(quantum[code][index])));
                         index++;
                 }
         }
