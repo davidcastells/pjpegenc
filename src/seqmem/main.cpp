@@ -17,6 +17,10 @@
 #include "../ByteArrayOutputStream.h"
 #include "../globals.h"
 
+#ifdef LINUX
+    #include "../arch/linux/PerformanceCounter.h"
+#endif
+
 #ifdef WIN32
     #include "../arch/windows/PerformanceCounter.h"
 #endif
@@ -127,17 +131,17 @@ int main(int argc, char* args[])
         }
         else
         {
-            CBitmap bitmap;
+            CBitmap* bitmap = new CBitmap();
 
-            if (bitmap.load(inputFile))
+            if (bitmap->load(inputFile))
                     printf("Loaded %s\n", inputFile);
             else
             {
-                    printf("Failed to load %s\n", inputFile);
-                    exit(1);
+                printf("Failed to load %s\n", inputFile);
+                exit(1);
             }
             
-            inputImage = &bitmap;
+            inputImage = bitmap;
 	}
         
         
