@@ -47,14 +47,6 @@ int JpegEncoder::jpegNaturalOrder[] =
      */
     JpegEncoder::JpegEncoder(Image* image, int quality, OutputStream* out)
     {
-//                MediaTracker tracker = new MediaTracker(null);
-//                tracker.addImage(image, 0);
-//                try {
-//                        tracker.waitForID(0);
-//                }
-//                catch (InterruptedException e) {
-//// Got to do something?
-//                }
 
         /*
         * Quality of the image.
@@ -65,7 +57,7 @@ int JpegEncoder::jpegNaturalOrder[] =
 
         /*
         * Getting picture information
-        * It takes the Width, Height anｄ RGB scans of the image.
+        * It takes the Width, Height and RGB scans of the image.
         */
         JpegObj = new JpegInfo(image);
         
@@ -78,11 +70,12 @@ int JpegEncoder::jpegNaturalOrder[] =
     
     JpegEncoder::~JpegEncoder()
     {
-    	    delete JpegObj;
-    	    delete m_outStream;
+        if (JpegObj != NULL) delete JpegObj;
+        if (m_outStream != NULL) delete m_outStream;
     }
 
-     void JpegEncoder::setQuality(int quality) {
+     void JpegEncoder::setQuality(int quality) 
+     {
         dct.init(quality);
     }
 
@@ -115,7 +108,8 @@ int JpegEncoder::jpegNaturalOrder[] =
 
         int lastDCvalue[NUMBER_OF_COMPONENTS];
 
-        for (int i=0; i < NUMBER_OF_COMPONENTS; i++) lastDCvalue[i] = 0;
+        for (int i=0; i < NUMBER_OF_COMPONENTS; i++) 
+            lastDCvalue[i] = 0;
 
         //int zeroArray[64]; // initialized to hold all zeros
         int Width = 0, Height = 0;
