@@ -18,7 +18,7 @@ ByteArrayOutputStream::ByteArrayOutputStream(int size)
 
 ByteArrayOutputStream::~ByteArrayOutputStream() 
 {
-    delete buf;
+    delete [] buf;
 }
 
 
