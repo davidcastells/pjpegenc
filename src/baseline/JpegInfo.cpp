@@ -96,11 +96,10 @@
         return Comment;
     }
 
-    /*
+    /**
      * This method creates and fills three arrays, Y, Cb, Cr using the
      * input image.
      */
-
     void JpegInfo::getYCCArray()
     {
         int r, g, b, y, x;
@@ -111,8 +110,8 @@
 
         for (y = 0; y < NUMBER_OF_COMPONENTS; y++)
         {
-                MaxHsampFactor = std::max(MaxHsampFactor, HsampFactor[y]);
-                MaxVsampFactor = std::max(MaxVsampFactor, VsampFactor[y]);
+            MaxHsampFactor = std::max(MaxHsampFactor, HsampFactor[y]);
+            MaxVsampFactor = std::max(MaxVsampFactor, VsampFactor[y]);
         }
         
         if (verbose)
@@ -158,10 +157,6 @@
     	{
             for (x = 0; x < imageWidth; ++x)
     	    {
-                /*int value = imageobj->getRGB();
-                r = ((value >> 16) & 0xff);
-                g = ((value >> 8) & 0xff);
-                b = (value  & 0xff);*/
                 imageobj->getRGB(x, y, &r, &g, &b);
 
 // The following three lines are a more correct color conversion but
