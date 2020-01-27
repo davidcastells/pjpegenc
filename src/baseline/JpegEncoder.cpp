@@ -100,7 +100,7 @@ int JpegEncoder::jpegNaturalOrder[] =
 
      void JpegEncoder::WriteCompressedData() 
     {
-    	    BufferedOutputStream* outStream = m_outStream;
+        BufferedOutputStream* outStream = m_outStream;
         int offset, i, j, r, c,a ,b, temp = 0;
         int comp, xpos, ypos, xblockoffset, yblockoffset;
         float dctArray1[8][8];
@@ -156,14 +156,7 @@ int JpegEncoder::jpegNaturalOrder[] =
                         {
                            for (b = 0; b < 8; b++)
                            {
-
-// I believe this is where the dirty line at the bottom of the image is
-// coming from.  I need to do a check here to make sure I'm not reading past
-// image data.
-// This seems to not be a big issue right now. (04/04/98)
-
 				dctArray1[a][b] = inputArray->get(ypos + yblockoffset + a, xpos + xblockoffset + b);
-                              
 			   }
                         }
 // The following code commented out because on some images this technique
@@ -195,7 +188,8 @@ int JpegEncoder::jpegNaturalOrder[] =
     }
 
     
-     void JpegEncoder::WriteHeaders()
+     
+    void JpegEncoder::WriteHeaders()
     {
         if (verbose)
             printf("Write headers\n");
