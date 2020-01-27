@@ -15,5 +15,7 @@ extern int verbose;
 // #define BIGFP   double
 #define BIGFP   float
 
+#define NUMBER_OF_THREADS   8
+
 #endif	/* GLOBALS_H */
 
