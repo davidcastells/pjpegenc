@@ -65,7 +65,7 @@ public:
 
 public:
 	JpegInfo();
-	~JpegInfo();
+	virtual ~JpegInfo();
 
 	JpegInfo(Image* image);
 
