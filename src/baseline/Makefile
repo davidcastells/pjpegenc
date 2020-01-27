@@ -1,11 +1,11 @@
 CC = g++
-CC_FLAGS=-DWIN32 -O3
+CC_FLAGS=-DLINUX -O2
 LINK=$(CC) -o $@  $< 
 
-EXEC = pjpegenc
-SOURCES = main.cpp ../FileOutputStream.cpp JpegEncoder.cpp ../DCT.cpp ../Huffman.cpp \
+EXEC = pjpegenc_baseline
+SOURCES = main.cpp ../FileOutputStream.cpp ../Bitmap.cpp JpegEncoder.cpp ../DCT.cpp ../Huffman.cpp \
     JpegInfo.cpp ../OutputStream.cpp ../BufferedOutputStream.cpp ../EmbeddedImage.cpp \
-    ../ByteArrayOutputStream.cpp ../arch/windows/PerformanceCounter.cpp
+    ../ByteArrayOutputStream.cpp ../arch/linux/PerformanceCounter.cpp
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
