@@ -27,6 +27,7 @@ an OpenCL kernel
 ## Citation 
 I would appreciate that you cite us
 
+<pre>
 @inproceedings{castells2010scalability,
   title={Scalability of a Parallel JPEG Encoder on Shared Memory Architectures},
   author={Castells-Rufas, David and Joven, Jaume and Carrabina, Jordi},
@@ -35,3 +36,4 @@ I would appreciate that you cite us
   year={2010},
   organization={IEEE}
 }
+</pre>
