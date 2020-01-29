@@ -59,17 +59,17 @@ public:
 	
 	T get(int i1, int i2, int i3, int i4)
 	{
-            return m_data[(i1*m_d2*m_d2*m_d4)+(i2*m_d3*m_d4)+(i3*m_d4)+i4];
+            return m_data[(i1*m_d2*m_d3*m_d4)+(i2*m_d3*m_d4)+(i3*m_d4)+i4];
 	}
 	
 	void put(int i1, int i2, int i3, int i4, T v)
 	{
-            m_data[(i1*m_d2*m_d2*m_d4)+(i2*m_d3*m_d4)+(i3*m_d4)+i4] = v;
+            m_data[(i1*m_d2*m_d3*m_d4)+(i2*m_d3*m_d4)+(i3*m_d4)+i4] = v;
 	}
         
         T* get3DRef(int i1, int i2, int i3)
         {
-            return &m_data[(i1*m_d2*m_d2*m_d4)+(i2*m_d3*m_d4)+(i3*m_d4)];
+            return &m_data[(i1*m_d2*m_d3*m_d4)+(i2*m_d3*m_d4)+(i3*m_d4)];
         }
 };
 

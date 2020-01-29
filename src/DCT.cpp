@@ -531,7 +531,8 @@
                 }
         }
 
-        for (i = 0; i < 8; i++) {
+        for (i = 0; i < 8; i++) 
+        {
                 tmp0 = output[i*8+0] + output[i*8+7];
                 tmp7 = output[i*8+0] - output[i*8+7];
                 tmp1 = output[i*8+1] + output[i*8+6];
