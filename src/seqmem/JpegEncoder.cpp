@@ -95,7 +95,7 @@ int JpegEncoder::jpegNaturalOrder[] =
     {
     	BufferedOutputStream* outStream = m_outStream;
         int offset, i, j, r, c,a ,b, temp = 0;
-        int comp, xpos, ypos, xblockoffset, yblockoffset;
+        int comp, xpos, ypos;
         float dctArray1[8][8];
         BIGFP dctArray2[8][8];
         int dctArray3[8*8];
@@ -115,80 +115,78 @@ int JpegEncoder::jpegNaturalOrder[] =
         int Width = 0, Height = 0;
         int nothing = 0;
         int MinBlockWidth, MinBlockHeight;
-// This initial setting of MinBlockWidth anｄ MinBlockHeight is done to
-// ensure they start with values larger than will actually be the case.
+
+        // This initial setting of MinBlockWidth and MinBlockHeight is done to
+        // ensure they start with values larger than will actually be the case.
         MinBlockWidth = ((imageWidth%8 != 0) ? (int) (floor((BIGFP) imageWidth/8.0) + 1)*8 : imageWidth);
         MinBlockHeight = ((imageHeight%8 != 0) ? (int) (floor((BIGFP) imageHeight/8.0) + 1)*8: imageHeight);
         
         for (comp = 0; comp < NUMBER_OF_COMPONENTS; comp++)
         {
-                MinBlockWidth = std::min(MinBlockWidth, JpegObj->BlockWidth[comp]);
-                MinBlockHeight = std::min(MinBlockHeight, JpegObj->BlockHeight[comp]);
+            MinBlockWidth = std::min(MinBlockWidth, JpegObj->BlockWidth[comp]);
+            MinBlockHeight = std::min(MinBlockHeight, JpegObj->BlockHeight[comp]);
         }
+        
+        printf("Block dimensions: %d x %d\n", MinBlockWidth, MinBlockHeight);
+        
         xpos = 0;
-        for (r = 0; r < MinBlockHeight; r++)
-        {
-           for (c = 0; c < MinBlockWidth; c++)
-           {
-               if (verbose)
-                   printf("Processing block %d,%d\n", c, r);
-               
-               xpos = c*8;
-               ypos = r*8;
-   
-               for (comp = 0; comp < NUMBER_OF_COMPONENTS; comp++)
-               {
-                  Width = JpegObj->BlockWidth[comp];
-                  Height = JpegObj->BlockHeight[comp];
+        
+        // we force block dimensions the same for all the channels
+        Width = JpegObj->BlockWidth[0];
+        Height = JpegObj->BlockHeight[0];
+        
+            for (r = 0; r < MinBlockHeight; r++)
+            {
+                for (c = 0; c < MinBlockWidth; c++)
+                {
+                    for (comp = 0; comp < NUMBER_OF_COMPONENTS; comp++)
+                    {
+        
+                    if (verbose)
+                        printf("Processing block %d,%d\n", c, r);
+
+                    xpos = c*8;
+                    ypos = r*8;
                  
-                  for(i = 0; i < JpegObj->VsampFactor[comp]; i++)
-                  {
-                     for(j = 0; j < JpegObj->HsampFactor[comp]; j++)
-                     {
-                        xblockoffset = j * 8;
-                        yblockoffset = i * 8;
-                        
-                        if (verbose)
-                            printf("YCrCb\n");
-                        
-                        JpegObj->getYCrCb(comp, ypos + yblockoffset, xpos + xblockoffset, dctArray1);
-                        
-                        
+                    
+                    if (verbose)
+                        printf("YCrCb\n");
+
+                    JpegObj->getYCrCb(comp, ypos , xpos , dctArray1);
                         
 // The following code commented out because on some images this technique
 // results in poor right and bottom borders.
 //                        if ((!JpegObj.lastColumnIsDummy[comp] || c < Width - 1) && (!JpegObj.lastRowIsDummy[comp] || r < Height - 1)) {
 
-                        if (verbose)
-                            printf("DCT\n");
+                    if (verbose)
+                        printf("DCT\n");
                         
-                        dct.forwardDCT(dctArray1, dctArray2);
+                    dct.forwardDCT(dctArray1, dctArray2);
                         
-                        if (verbose)
-                            printf("Q\n");
-                        
-                        dct.quantizeBlock(dctArray2, JpegObj->QtableNumber[comp], dctArray3);
+                    if (verbose)
+                        printf("Q\n");
+
+                    dct.quantizeBlock(dctArray2, JpegObj->QtableNumber[comp], dctArray3);
 //                        }
 //                        else {
 //                           zeroArray[0] = dctArray3[0];
 //                           zeroArray[0] = lastDCvalue[comp];
 //                           dctArray3 = zeroArray;
 //                        }
-                        if (verbose)
-                            printf("Huf\n");
+                    if (verbose)
+                        printf("Huf\n");
                         
-                        Huf.run(outStream, dctArray3, lastDCvalue[comp], JpegObj->DCtableNumber[comp], JpegObj->ACtableNumber[comp], false);
-                        lastDCvalue[comp] = dctArray3[0];
+                    Huf.run(outStream, dctArray3, lastDCvalue[comp], JpegObj->DCtableNumber[comp], JpegObj->ACtableNumber[comp], false);
+                    lastDCvalue[comp] = dctArray3[0];
                         
-                        if (verbose)
-                            printf("|\n");
-                     }
-                  }
-               }
+                    if (verbose)
+                        printf("|\n");
+                    
             }
         }
-        Huf.flushBuffer(outStream);
     }
+    Huf.flushBuffer(outStream);
+}
 
      void JpegEncoder::WriteEOI() 
     {
