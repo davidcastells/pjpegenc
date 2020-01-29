@@ -92,22 +92,23 @@ public:
             m_d4 = d4;
             m_d5 = d5;
 		
+            
             m_data = new T[d1*d2*d3*d4*d5];
 	}
 	
 	T get(int i1, int i2, int i3, int i4, int i5)
 	{
-            return m_data[(i1*m_d2*m_d2*m_d4*m_d5)+(i2*m_d3*m_d4*m_d5)+(i3*m_d4*m_d5)+(i4*m_d5)+i5];
+            return m_data[(i1*m_d2*m_d3*m_d4*m_d5)+(i2*m_d3*m_d4*m_d5)+(i3*m_d4*m_d5)+(i4*m_d5)+i5];
 	}
 	
 	void put(int i1, int i2, int i3, int i4, int i5, T v)
 	{
-            m_data[(i1*m_d2*m_d2*m_d4*m_d5)+(i2*m_d3*m_d4*m_d5)+(i3*m_d4*m_d5)+(i4*m_d5)+i5] = v;
+            m_data[(i1*m_d2*m_d3*m_d4*m_d5)+(i2*m_d3*m_d4*m_d5)+(i3*m_d4*m_d5)+(i4*m_d5)+i5] = v;
 	}
         
         T* get3DRef(int i1, int i2, int i3)
         {
-            return &m_data[(i1*m_d2*m_d2*m_d4*m_d5)+(i2*m_d3*m_d4*m_d5)+(i3*m_d4*m_d5)];
+            return &m_data[(i1*m_d2*m_d3*m_d4*m_d5)+(i2*m_d3*m_d4*m_d5)+(i3*m_d4*m_d5)];
         }
 };
 
