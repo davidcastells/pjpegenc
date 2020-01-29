@@ -11,6 +11,9 @@ OBJECTS = $(SOURCES:.cpp=.o)
 
 $(EXEC): $(OBJECTS)
 	$(CC) $(OBJECTS) -o $(EXEC)
+	
+$(EXEC)_profile: $(OBJECTS)
+	$(CC) -pg $(OBJECTS) -o $(EXEC)_gprof
 
 # To obtain object files
 %.o: %.cpp
@@ -18,6 +21,8 @@ $(EXEC): $(OBJECTS)
 
 
 all: $(EXEC)
+	
+profile: $(EXEC)_profile
 	
 clean:
 	rm -f $(EXEC) $(OBJECTS)
