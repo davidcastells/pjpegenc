@@ -1,5 +1,5 @@
 CC = g++
-CC_FLAGS=-DLINUX -O0 -g
+CC_FLAGS=-DLINUX -O2 -g
 LINK=$(CC) -o $@  $< 
 
 EXEC = pjpegenc_phases
