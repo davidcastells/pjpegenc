@@ -10,8 +10,10 @@
 #include "../Matrix.h"
 #include "../globals.h"
 
+
 #include <math.h>
 #include <stdio.h>
+#include <assert.h>
 
 /*
  * JpegInfo - Given an image, sets default information about it and divides
@@ -108,9 +110,12 @@
 
         for (y = 0; y < NUMBER_OF_COMPONENTS; y++)
         {
-                MaxHsampFactor = std::max(MaxHsampFactor, HsampFactor[y]);
-                MaxVsampFactor = std::max(MaxVsampFactor, VsampFactor[y]);
+            MaxHsampFactor = std::max(MaxHsampFactor, HsampFactor[y]);
+            MaxVsampFactor = std::max(MaxVsampFactor, VsampFactor[y]);
         }
+        
+        assert(MaxHsampFactor == 1);
+        assert(MaxVsampFactor == 1);
         
         if (verbose)
         {
@@ -138,34 +143,34 @@
         
     }
     
-            void JpegInfo::getYCrCb(int comp, int y, int x, float dctArray1[8][8])
+    void JpegInfo::getYCrCb(int comp, int y, int x, float dctArray1[8][8])
+    {
+        int r,g,b;
+        float v;
+
+        for (int a = 0; a < 8; a++)
+        {
+            for (int xb = 0; xb < 8; xb++)
             {
-                int r,g,b;
-                float v;
-                
-                for (int a = 0; a < 8; a++)
+                imageobj->getRGB(x+xb, y+a, &r, &g, &b);
+
+                switch (comp)
                 {
-                    for (int xb = 0; xb < 8; xb++)
-                    {
-                        imageobj->getRGB(x+xb, y+a, &r, &g, &b);
-                        
-                        switch (comp)
-                        {
-                            case 0: // Y
-                                v = (float)((0.299 * (float)r + 0.587 * (float)g + 0.114 * (float)b));
-                                break;
-                            case 1: // Cr
-                                v = 128 + (float)((-0.16874 * (float)r - 0.33126 * (float)g + 0.5 * (float)b));
-                                break;
-                            case 2: // Cb
-                                v =  128 + (float)((0.5 * (float)r - 0.41869 * (float)g - 0.08131 * (float)b));
-                                break;
-                        }
-                        
-			dctArray1[a][xb] = v;                              
-                    }
+                    case 0: // Y
+                        v = (float)((0.299 * (float)r + 0.587 * (float)g + 0.114 * (float)b));
+                        break;
+                    case 1: // Cr
+                        v = 128 + (float)((-0.16874 * (float)r - 0.33126 * (float)g + 0.5 * (float)b));
+                        break;
+                    case 2: // Cb
+                        v =  128 + (float)((0.5 * (float)r - 0.41869 * (float)g - 0.08131 * (float)b));
+                        break;
                 }
+
+                dctArray1[a][xb] = v;                              
             }
+        }
+    }
 
 
     /*
