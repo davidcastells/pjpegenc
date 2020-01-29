@@ -1,5 +1,5 @@
-all: baseline seqmem threads
-clean:	baseline_clean seqmem_clean threads_clean
+all: baseline seqmem phases opencl_fpga_s1
+clean:	baseline_clean seqmem_clean phases_clean opencl_fpga_s1_clean
 	
 baseline:
 	$(MAKE) -C src/baseline
@@ -7,8 +7,11 @@ baseline:
 seqmem:
 	$(MAKE) -C src/seqmem
 	
-threads:
+phases:
 	$(MAKE) -C src/phases
+
+opencl_fpga_s1:
+	$(MAKE) -C src/opencl_fpga_s1
 	
 baseline_clean:
 	$(MAKE) -C src/baseline clean
@@ -16,5 +19,8 @@ baseline_clean:
 seqmem_clean:
 	$(MAKE) -C src/seqmem clean
 	
-threads_clean:
+phases_clean:
 	$(MAKE) -C src/phases clean
+
+opencl_fpga_s1_clean:
+	$(MAKE) -C src/opencl_fpga_s1 clean

@@ -13,6 +13,11 @@
           <in>JpegInfo.cpp</in>
           <in>main.cpp</in>
         </df>
+        <df name="opencl_fpga_s1">
+          <in>JpegEncoder.cpp</in>
+          <in>JpegInfo.cpp</in>
+          <in>main.cpp</in>
+        </df>
         <df name="phases">
           <in>JpegEncoder.cpp</in>
           <in>JpegInfo.cpp</in>
@@ -30,6 +35,7 @@
         <in>EmbeddedImage.cpp</in>
         <in>FileOutputStream.cpp</in>
         <in>Huffman.cpp</in>
+        <in>OpenCLUtils.cpp</in>
         <in>OutputStream.cpp</in>
       </df>
     </df>
@@ -98,6 +104,13 @@
         </ccTool>
       </folder>
       <folder path="0/src/baseline">
+        <ccTool>
+          <preprocessorList>
+            <Elem>LINUX</Elem>
+          </preprocessorList>
+        </ccTool>
+      </folder>
+      <folder path="0/src/opencl_fpga_s1">
         <ccTool>
           <preprocessorList>
             <Elem>LINUX</Elem>
@@ -188,6 +201,16 @@
           </preprocessorList>
         </ccTool>
       </item>
+      <item path="src/OpenCLUtils.cpp" ex="false" tool="1" flavor2="4">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>src/opencl_fpga_s1</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>LINUX</Elem>
+          </preprocessorList>
+        </ccTool>
+      </item>
       <item path="src/OutputStream.cpp" ex="false" tool="1" flavor2="4">
         <ccTool flags="0">
           <incDir>
@@ -207,6 +230,18 @@
         </ccTool>
       </item>
       <item path="src/baseline/main.cpp" ex="false" tool="1" flavor2="4">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="src/opencl_fpga_s1/JpegEncoder.cpp" ex="false" tool="1" flavor2="4">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="src/opencl_fpga_s1/JpegInfo.cpp" ex="false" tool="1" flavor2="4">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
+      <item path="src/opencl_fpga_s1/main.cpp" ex="false" tool="1" flavor2="4">
         <ccTool flags="0">
         </ccTool>
       </item>
