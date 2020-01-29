@@ -403,7 +403,219 @@
         }
 
     }
+     
+     /**
+      * just for step by step migration to linear array
+      * @param input
+      * @param output
+      */     
+     void DCT::forwardDCT(float* input, BIGFP output[8][8])
+    {
+//        double output[][] = new double[N][N];
+        BIGFP tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
+        BIGFP tmp10, tmp11, tmp12, tmp13;
+        BIGFP z1, z2, z3, z4, z5, z11, z13;
+        int i;
+        int j;
 
+// Subtracts 128 from the input values
+        for (i = 0; i < 8; i++)
+        {
+                for(j = 0; j < 8; j++)
+                {
+                        output[i][j] = ((BIGFP)input[i*8+j] - (BIGFP)128.0);
+//                        input[i][j] -= 128;
+
+                }
+        }
+
+        for (i = 0; i < 8; i++) {
+                tmp0 = output[i][0] + output[i][7];
+                tmp7 = output[i][0] - output[i][7];
+                tmp1 = output[i][1] + output[i][6];
+                tmp6 = output[i][1] - output[i][6];
+                tmp2 = output[i][2] + output[i][5];
+                tmp5 = output[i][2] - output[i][5];
+                tmp3 = output[i][3] + output[i][4];
+                tmp4 = output[i][3] - output[i][4];
+
+                tmp10 = tmp0 + tmp3;
+                tmp13 = tmp0 - tmp3;
+                tmp11 = tmp1 + tmp2;
+                tmp12 = tmp1 - tmp2;
+
+                output[i][0] = tmp10 + tmp11;
+                output[i][4] = tmp10 - tmp11;
+
+                z1 = (tmp12 + tmp13) * (BIGFP) 0.707106781;
+                output[i][2] = tmp13 + z1;
+                output[i][6] = tmp13 - z1;
+
+                tmp10 = tmp4 + tmp5;
+                tmp11 = tmp5 + tmp6;
+                tmp12 = tmp6 + tmp7;
+
+                z5 = (tmp10 - tmp12) * (BIGFP) 0.382683433;
+                z2 = ((BIGFP) 0.541196100) * tmp10 + z5;
+                z4 = ((BIGFP) 1.306562965) * tmp12 + z5;
+                z3 = tmp11 * ((BIGFP) 0.707106781);
+
+                z11 = tmp7 + z3;
+                z13 = tmp7 - z3;
+
+                output[i][5] = z13 + z2;
+                output[i][3] = z13 - z2;
+                output[i][1] = z11 + z4;
+                output[i][7] = z11 - z4;
+        }
+
+        for (i = 0; i < 8; i++) {
+                tmp0 = output[0][i] + output[7][i];
+                tmp7 = output[0][i] - output[7][i];
+                tmp1 = output[1][i] + output[6][i];
+                tmp6 = output[1][i] - output[6][i];
+                tmp2 = output[2][i] + output[5][i];
+                tmp5 = output[2][i] - output[5][i];
+                tmp3 = output[3][i] + output[4][i];
+                tmp4 = output[3][i] - output[4][i];
+
+                tmp10 = tmp0 + tmp3;
+                tmp13 = tmp0 - tmp3;
+                tmp11 = tmp1 + tmp2;
+                tmp12 = tmp1 - tmp2;
+
+                output[0][i] = tmp10 + tmp11;
+                output[4][i] = tmp10 - tmp11;
+
+                z1 = (tmp12 + tmp13) * (BIGFP) 0.707106781;
+                output[2][i] = tmp13 + z1;
+                output[6][i] = tmp13 - z1;
+
+                tmp10 = tmp4 + tmp5;
+                tmp11 = tmp5 + tmp6;
+                tmp12 = tmp6 + tmp7;
+
+                z5 = (tmp10 - tmp12) * (BIGFP) 0.382683433;
+                z2 = ((BIGFP) 0.541196100) * tmp10 + z5;
+                z4 = ((BIGFP) 1.306562965) * tmp12 + z5;
+                z3 = tmp11 * ((BIGFP) 0.707106781);
+
+                z11 = tmp7 + z3;
+                z13 = tmp7 - z3;
+
+                output[5][i] = z13 + z2;
+                output[3][i] = z13 - z2;
+                output[1][i] = z11 + z4;
+                output[7][i] = z11 - z4;
+        }
+
+    }
+
+     void DCT::forwardDCT(float* input, BIGFP* output)
+    {
+//        double output[][] = new double[N][N];
+        BIGFP tmp0, tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7;
+        BIGFP tmp10, tmp11, tmp12, tmp13;
+        BIGFP z1, z2, z3, z4, z5, z11, z13;
+        int i;
+        int j;
+
+// Subtracts 128 from the input values
+        for (i = 0; i < 8; i++)
+        {
+                for(j = 0; j < 8; j++)
+                {
+                        output[i*8+j] = ((BIGFP)input[i*8+j] - (BIGFP)128.0);
+//                        input[i*8+j] -= 128;
+
+                }
+        }
+
+        for (i = 0; i < 8; i++) {
+                tmp0 = output[i*8+0] + output[i*8+7];
+                tmp7 = output[i*8+0] - output[i*8+7];
+                tmp1 = output[i*8+1] + output[i*8+6];
+                tmp6 = output[i*8+1] - output[i*8+6];
+                tmp2 = output[i*8+2] + output[i*8+5];
+                tmp5 = output[i*8+2] - output[i*8+5];
+                tmp3 = output[i*8+3] + output[i*8+4];
+                tmp4 = output[i*8+3] - output[i*8+4];
+
+                tmp10 = tmp0 + tmp3;
+                tmp13 = tmp0 - tmp3;
+                tmp11 = tmp1 + tmp2;
+                tmp12 = tmp1 - tmp2;
+
+                output[i*8+0] = tmp10 + tmp11;
+                output[i*8+4] = tmp10 - tmp11;
+
+                z1 = (tmp12 + tmp13) * (BIGFP) 0.707106781;
+                output[i*8+2] = tmp13 + z1;
+                output[i*8+6] = tmp13 - z1;
+
+                tmp10 = tmp4 + tmp5;
+                tmp11 = tmp5 + tmp6;
+                tmp12 = tmp6 + tmp7;
+
+                z5 = (tmp10 - tmp12) * (BIGFP) 0.382683433;
+                z2 = ((BIGFP) 0.541196100) * tmp10 + z5;
+                z4 = ((BIGFP) 1.306562965) * tmp12 + z5;
+                z3 = tmp11 * ((BIGFP) 0.707106781);
+
+                z11 = tmp7 + z3;
+                z13 = tmp7 - z3;
+
+                output[i*8+5] = z13 + z2;
+                output[i*8+3] = z13 - z2;
+                output[i*8+1] = z11 + z4;
+                output[i*8+7] = z11 - z4;
+        }
+
+        for (i = 0; i < 8; i++) 
+        {
+                tmp0 = output[0*8+i] + output[7*8+i];
+                tmp7 = output[0*8+i] - output[7*8+i];
+                tmp1 = output[1*8+i] + output[6*8+i];
+                tmp6 = output[1*8+i] - output[6*8+i];
+                tmp2 = output[2*8+i] + output[5*8+i];
+                tmp5 = output[2*8+i] - output[5*8+i];
+                tmp3 = output[3*8+i] + output[4*8+i];
+                tmp4 = output[3*8+i] - output[4*8+i];
+
+                tmp10 = tmp0 + tmp3;
+                tmp13 = tmp0 - tmp3;
+                tmp11 = tmp1 + tmp2;
+                tmp12 = tmp1 - tmp2;
+
+                output[0*8+i] = tmp10 + tmp11;
+                output[4*8+i] = tmp10 - tmp11;
+
+                z1 = (tmp12 + tmp13) * (BIGFP) 0.707106781;
+                output[2*8+i] = tmp13 + z1;
+                output[6*8+i] = tmp13 - z1;
+
+                tmp10 = tmp4 + tmp5;
+                tmp11 = tmp5 + tmp6;
+                tmp12 = tmp6 + tmp7;
+
+                z5 = (tmp10 - tmp12) * (BIGFP) 0.382683433;
+                z2 = ((BIGFP) 0.541196100) * tmp10 + z5;
+                z4 = ((BIGFP) 1.306562965) * tmp12 + z5;
+                z3 = tmp11 * ((BIGFP) 0.707106781);
+
+                z11 = tmp7 + z3;
+                z13 = tmp7 - z3;
+
+                output[5*8+i] = z13 + z2;
+                output[3*8+i] = z13 - z2;
+                output[1*8+i] = z11 + z4;
+                output[7*8+i] = z11 - z4;
+        }
+
+    }
+
+     
+     
     /*
     * This method quantitizes data and rounds it to the nearest integer.
     */
@@ -418,6 +630,24 @@
                 {
 // The second line results in significantly better compression.
                         outputData[index] = (int)(round(inputData[i][j] * (Divisors[code][index])));
+//                        outputData[index] = (int)(((inputData[i][j] * (((double[]) (Divisors[code]))[index])) + 16384.5) -16384);
+                        index++;
+                }
+        }
+
+    }
+    
+    void DCT::quantizeBlock(BIGFP* inputData, int code, int* outputData)
+    {
+        int i, j;
+        int index;
+        index = 0;
+        for (i = 0; i < 8; i++)
+        {
+                for (j = 0; j < 8; j++)
+                {
+// The second line results in significantly better compression.
+                        outputData[index] = (int)(round(inputData[i*8+j] * (Divisors[code][index])));
 //                        outputData[index] = (int)(((inputData[i][j] * (((double[]) (Divisors[code]))[index])) + 16384.5) -16384);
                         index++;
                 }
