@@ -11,3 +11,5 @@ JPegInfo. This reduces the amount of memory required to do the compression.
 
 The DCT, Quantization and Hufman encoding are done in sequential order per 
 every block.
+
+To simplify the processing and memory handling, we removed the color downsampling
