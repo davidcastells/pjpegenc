@@ -3,12 +3,20 @@
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <df root="." name="0">
       <df name="src">
+        <df name="arch">
+          <df name="linux">
+            <in>PerformanceCounter.c</in>
+          </df>
+        </df>
         <df name="baseline">
           <in>JpegEncoder.cpp</in>
           <in>JpegInfo.cpp</in>
+          <in>main.cpp</in>
         </df>
         <df name="phases">
           <in>JpegEncoder.cpp</in>
+          <in>JpegInfo.cpp</in>
+          <in>main.cpp</in>
         </df>
         <df name="seqmem">
           <in>JpegEncoder.cpp</in>
@@ -47,9 +55,6 @@
       </toolsSet>
       <flagsDictionary>
         <element flagsID="0" commonFlags="-O2"/>
-        <element flagsID="1" commonFlags="-mtune=generic -march=x86-64"/>
-        <element flagsID="2" commonFlags="-mtune=generic -march=x86-64 -O2"/>
-        <element flagsID="3" commonFlags="-mtune=generic -march=x86-64 -O3"/>
       </flagsDictionary>
       <codeAssistance>
       </codeAssistance>
@@ -59,44 +64,88 @@
           <buildCommand>${MAKE} -f Makefile</buildCommand>
           <cleanCommand>${MAKE} -f Makefile clean</cleanCommand>
           <executablePath></executablePath>
-          <ccTool>
-            <preprocessorList>
-              <Elem>LINUX</Elem>
-            </preprocessorList>
-          </ccTool>
         </makeTool>
         <preBuild>
           <preBuildCommandWorkingDir>.</preBuildCommandWorkingDir>
           <preBuildCommand></preBuildCommand>
         </preBuild>
       </makefileType>
+      <item path="C:/Projects/Research/INT_JpegEnc/pjpegenc/src/arch/linux/PerformanceCounter.c"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
       <item path="C:/Projects/Research/INT_JpegEnc/pjpegenc/src/phases/JpegEncoder.cpp"
             ex="false"
             tool="1"
-            flavor2="0">
+            flavor2="4">
       </item>
-      <item path="src/Bitmap.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool flags="2">
+      <item path="C:/Projects/Research/INT_JpegEnc/pjpegenc/src/phases/JpegInfo.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <item path="C:/Projects/Research/INT_JpegEnc/pjpegenc/src/phases/main.cpp"
+            ex="false"
+            tool="1"
+            flavor2="4">
+      </item>
+      <folder path="0/src/arch">
+        <ccTool>
           <incDir>
-            <pElem>../../../../cygwin64/lib/gcc/x86_64-pc-cygwin/7.4.0/include</pElem>
-            <pElem>../../../../cygwin64/lib/gcc/x86_64-pc-cygwin/7.4.0/include/c++</pElem>
-            <pElem>src</pElem>
-            <pElem>src/seqmem</pElem>
+            <pElem>src/baseline</pElem>
           </incDir>
+        </ccTool>
+      </folder>
+      <folder path="0/src/baseline">
+        <ccTool>
+          <preprocessorList>
+            <Elem>LINUX</Elem>
+          </preprocessorList>
+        </ccTool>
+      </folder>
+      <folder path="0/src/phases">
+        <ccTool>
+          <preprocessorList>
+            <Elem>LINUX</Elem>
+          </preprocessorList>
+        </ccTool>
+      </folder>
+      <folder path="0/src/seqmem">
+        <ccTool>
+          <preprocessorList>
+            <Elem>LINUX</Elem>
+          </preprocessorList>
+        </ccTool>
+      </folder>
+      <item path="src/Bitmap.cpp" ex="false" tool="1" flavor2="4">
+        <ccTool flags="0">
+          <incDir>
+            <pElem>src/baseline</pElem>
+          </incDir>
+          <preprocessorList>
+            <Elem>LINUX</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="src/BufferedOutputStream.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool flags="3">
+        <ccTool flags="0">
           <incDir>
-            <pElem>src</pElem>
+            <pElem>src/baseline</pElem>
           </incDir>
+          <preprocessorList>
+            <Elem>LINUX</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="src/ByteArrayOutputStream.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool flags="3">
+        <ccTool flags="0">
           <incDir>
-            <pElem>src</pElem>
+            <pElem>src/baseline</pElem>
           </incDir>
+          <preprocessorList>
+            <Elem>LINUX</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="src/DCT.cpp" ex="false" tool="1" flavor2="4">
@@ -104,34 +153,49 @@
           <incDir>
             <pElem>src/baseline</pElem>
           </incDir>
+          <preprocessorList>
+            <Elem>LINUX</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="src/EmbeddedImage.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool flags="3">
+        <ccTool flags="0">
           <incDir>
-            <pElem>src</pElem>
+            <pElem>src/baseline</pElem>
           </incDir>
+          <preprocessorList>
+            <Elem>LINUX</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="src/FileOutputStream.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool flags="3">
+        <ccTool flags="0">
           <incDir>
-            <pElem>src</pElem>
+            <pElem>src/baseline</pElem>
           </incDir>
+          <preprocessorList>
+            <Elem>LINUX</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="src/Huffman.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool flags="3">
+        <ccTool flags="0">
           <incDir>
-            <pElem>src</pElem>
+            <pElem>src/baseline</pElem>
           </incDir>
+          <preprocessorList>
+            <Elem>LINUX</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="src/OutputStream.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool flags="3">
+        <ccTool flags="0">
           <incDir>
-            <pElem>src</pElem>
+            <pElem>src/baseline</pElem>
           </incDir>
+          <preprocessorList>
+            <Elem>LINUX</Elem>
+          </preprocessorList>
         </ccTool>
       </item>
       <item path="src/baseline/JpegEncoder.cpp" ex="false" tool="1" flavor2="4">
@@ -142,17 +206,20 @@
         <ccTool flags="0">
         </ccTool>
       </item>
+      <item path="src/baseline/main.cpp" ex="false" tool="1" flavor2="4">
+        <ccTool flags="0">
+        </ccTool>
+      </item>
       <item path="src/seqmem/JpegEncoder.cpp" ex="false" tool="1" flavor2="4">
+        <ccTool flags="0">
+        </ccTool>
       </item>
       <item path="src/seqmem/JpegInfo.cpp" ex="false" tool="1" flavor2="4">
+        <ccTool flags="0">
+        </ccTool>
       </item>
       <item path="src/seqmem/main.cpp" ex="false" tool="1" flavor2="4">
-        <ccTool flags="1">
-          <incDir>
-            <pElem>src/arch/linux</pElem>
-            <pElem>src/seqmem</pElem>
-            <pElem>src</pElem>
-          </incDir>
+        <ccTool flags="0">
         </ccTool>
       </item>
     </conf>
