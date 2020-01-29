@@ -89,12 +89,15 @@ public:
      * method as implemented in the IJG Jpeg-6a library.
      */
      void forwardDCT(float input[N][N], BIGFP output[N][N]);
+    void forwardDCT(float* input, BIGFP output[8][8]);
+    void forwardDCT(float* input, BIGFP* output);
 
     /*
     * This method quantitizes data and rounds it to the nearest integer.
     */
-     void quantizeBlock(BIGFP inputData[N][N], int code, int outputData[N*N] );
-
+    void quantizeBlock(BIGFP inputData[N][N], int code, int outputData[N*N] );
+    void quantizeBlock(BIGFP* inputData, int code, int* outputData);
+    
     /*
     * This is the method for quantizing a block DCT'ed with forwardDCTExtreme
     * This method quantitizes data anｄ rounds it to the nearest integer.
