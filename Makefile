@@ -1,5 +1,5 @@
-all: baseline seqmem phases opencl_fpga_s1
-clean:	baseline_clean seqmem_clean phases_clean opencl_fpga_s1_clean
+all: baseline seqmem phases 
+clean:	baseline_clean seqmem_clean phases_clean 
 	
 baseline:
 	$(MAKE) -C src/baseline
@@ -11,6 +11,9 @@ phases:
 	$(MAKE) -C src/phases
 
 opencl_fpga_s1:
+	$(MAKE) -C src/opencl_fpga_s1
+
+opencl_gpu_s1:
 	$(MAKE) -C src/opencl_fpga_s1
 	
 baseline_clean:
