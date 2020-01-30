@@ -145,39 +145,37 @@
         int comp, r,c, b, y, x;
         int rc, gc, bc;
 
-        
-        
-        
         // assume they are all the same (no subsampling)
         int MinBlockHeight = BlockHeight[0];    
         int MinBlockWidth = BlockWidth[0];
-
-        for (comp = 0; comp < NUMBER_OF_COMPONENTS; comp++)
+        
+        for (r = 0; r < MinBlockHeight; r++)
         {
-           for (r = 0; r < MinBlockHeight; r++)
+            for (c = 0; c < MinBlockWidth; c++)
             {
-               for (c = 0; c < MinBlockWidth; c++)
-               {
-                    for (y = 0; y < 8; y++)
+                int xpos = c * 8;
+                int ypos = r * 8;
+                
+                 for (y = 0; y < 8; y++)
+                 {
+                    for (x = 0; x < 8; x++)
                     {
-                       for (x = 0; x < 8; x++)
-                       {
-                           imageobj->getRGB(x, y, &rc, &gc, &bc);
+                        imageobj->getRGB(xpos+x, ypos+y, &rc, &gc, &bc);
 
-                            // The following three lines are a more correct color conversion but
-                            // the current conversion technique is sufficient and results in a higher
-                            // compression rate.
-                            //                Y[y][x] = 16 + (float)(0.8588*(0.299 * (float)r + 0.587 * (float)g + 0.114 * (float)b ));
-                            //                Cb1[y][x] = 128 + (float)(0.8784*(-0.16874 * (float)r - 0.33126 * (float)g + 0.5 * (float)b));
-                            //                Cr1[y][x] = 128 + (float)(0.8784*(0.5 * (float)r - 0.41869 * (float)g - 0.08131 * (float)b));
-                            dctArray1->put(0, r, c, y, x, (float)((0.299 * (float)rc + 0.587 * (float)gc + 0.114 * (float)bc)));
-                            dctArray1->put(1, r, c, y, x,  128 + (float)((-0.16874 * (float)rc - 0.33126 * (float)gc + 0.5 * (float)bc)));
-                            dctArray1->put(2, r, c, y, x,  128 + (float)((0.5 * (float)rc - 0.41869 * (float)gc - 0.08131 * (float)bc)));
-                       }
+                         // The following three lines are a more correct color conversion but
+                         // the current conversion technique is sufficient and results in a higher
+                         // compression rate.
+                         //                Y[y][x] = 16 + (float)(0.8588*(0.299 * (float)r + 0.587 * (float)g + 0.114 * (float)b ));
+                         //                Cb1[y][x] = 128 + (float)(0.8784*(-0.16874 * (float)r - 0.33126 * (float)g + 0.5 * (float)b));
+                         //                Cr1[y][x] = 128 + (float)(0.8784*(0.5 * (float)r - 0.41869 * (float)g - 0.08131 * (float)b));
+                         dctArray1->put(0, r, c, y, x, (float)((0.299 * (float)rc + 0.587 * (float)gc + 0.114 * (float)bc)));
+                         dctArray1->put(1, r, c, y, x,  128 + (float)((-0.16874 * (float)rc - 0.33126 * (float)gc + 0.5 * (float)bc)));
+                         dctArray1->put(2, r, c, y, x,  128 + (float)((0.5 * (float)rc - 0.41869 * (float)gc - 0.08131 * (float)bc)));
                     }
-               }
-           }
+                 }
+            }
         }
+
     }
 
     

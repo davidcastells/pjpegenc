@@ -136,17 +136,14 @@ int JpegEncoder::jpegNaturalOrder[] =
         int WidthBlocks = MinBlockWidth; 
         int HeightBlocks = MinBlockHeight;
 
-        Matrix5D<float>* dctArray1 = new Matrix5D<float>(NUMBER_OF_COMPONENTS, WidthBlocks, HeightBlocks, 8,8);
+        Matrix5D<float>* dctArray1 = new Matrix5D<float>(NUMBER_OF_COMPONENTS, HeightBlocks, WidthBlocks,  8,8);
         
         JpegObj->rgbToYCrCb(dctArray1);
         JpegObj->freeImage();
-        
-                
-        
                 
         // PHASE 1 - DCT
         
-        Matrix5D<BIGFP>* dctArray2 = new Matrix5D<BIGFP>(NUMBER_OF_COMPONENTS, WidthBlocks, HeightBlocks, 8,8);
+        Matrix5D<BIGFP>* dctArray2 = new Matrix5D<BIGFP>(NUMBER_OF_COMPONENTS,  HeightBlocks, WidthBlocks,  8,8);
 
         for (comp = 0; comp < NUMBER_OF_COMPONENTS; comp++)
         {
