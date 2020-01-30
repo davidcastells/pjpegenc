@@ -1,5 +1,5 @@
 CC = g++
-CC_FLAGS=-DLINUX -O2
+CC_FLAGS=-DLINUX -O2 -g
 LINK=$(CC) -o $@  $< 
 
 EXEC = pjpegenc_baseline
