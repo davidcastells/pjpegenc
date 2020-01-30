@@ -78,8 +78,8 @@ int JpegEncoder::jpegNaturalOrder[] =
     
     JpegEncoder::~JpegEncoder()
     {
-    	    delete JpegObj;
-    	    delete m_outStream;
+        if (JpegObj != NULL) delete JpegObj;
+        delete m_outStream;
     }
 
      void JpegEncoder::setQuality(int quality) {
@@ -132,45 +132,43 @@ int JpegEncoder::jpegNaturalOrder[] =
         xpos = 0;
         
 
-        // PHASE 1 - DCT
-        Width = JpegObj->BlockWidth[comp];
-        Height = JpegObj->BlockHeight[comp];
+        // PHASE 1 - RGB2YCrCb
+        int WidthBlocks = MinBlockWidth; 
+        int HeightBlocks = MinBlockHeight;
 
-        Matrix5D<float>* dctArray1 = new Matrix5D<float>(NUMBER_OF_COMPONENTS, MinBlockHeight, MinBlockWidth, 8,8);
-        Matrix5D<BIGFP>* dctArray2 = new Matrix5D<BIGFP>(NUMBER_OF_COMPONENTS, MinBlockHeight, MinBlockWidth, 8,8);
+        Matrix5D<float>* dctArray1 = new Matrix5D<float>(NUMBER_OF_COMPONENTS, WidthBlocks, HeightBlocks, 8,8);
+        
+        JpegObj->rgbToYCrCb(dctArray1);
+        JpegObj->freeImage();
+        
+                
+        
+                
+        // PHASE 1 - DCT
+        
+        Matrix5D<BIGFP>* dctArray2 = new Matrix5D<BIGFP>(NUMBER_OF_COMPONENTS, WidthBlocks, HeightBlocks, 8,8);
 
         for (comp = 0; comp < NUMBER_OF_COMPONENTS; comp++)
         {
-           Matrix<float>* inputArray = JpegObj->Components[comp];
-           for (r = 0; r < MinBlockHeight; r++)
+           for (r = 0; r < HeightBlocks; r++)
             {
-               for (c = 0; c < MinBlockWidth; c++)
+               for (c = 0; c < WidthBlocks; c++)
                {
-                   xpos = c*8;
-                   ypos = r*8;
-
-                    for (a = 0; a < 8; a++)
-                    {
-                       for (b = 0; b < 8; b++)
-                       {
-                            dctArray1->put(comp,r,c,a,b, inputArray->get(ypos + a, xpos +  b));
-                       }
-                    }
-
                    dct.forwardDCT(dctArray1->get3DRef(comp, r, c), dctArray2->get3DRef(comp, r, c));
-
                 }
            }
         }
+        
+        delete dctArray1;
 
-        // PHASE 2 - Q
-        Matrix5D<int>* dctArray3 = new Matrix5D<int>(NUMBER_OF_COMPONENTS, MinBlockHeight, MinBlockWidth, 8,8);
+        // PHASE 3 - Q
+        Matrix5D<int>* dctArray3 = new Matrix5D<int>(NUMBER_OF_COMPONENTS, HeightBlocks, WidthBlocks, 8,8);
         
         for (comp = 0; comp < NUMBER_OF_COMPONENTS; comp++)
         {
-        for (r = 0; r < MinBlockHeight; r++)
+        for (r = 0; r < HeightBlocks; r++)
         {
-           for (c = 0; c < MinBlockWidth; c++)
+           for (c = 0; c < WidthBlocks; c++)
            {
                xpos = c*8;
                ypos = r*8;
@@ -180,10 +178,12 @@ int JpegEncoder::jpegNaturalOrder[] =
            }
         }
 
-        // PHASE 3 - Huffman
-        for (r = 0; r < MinBlockHeight; r++)
+        delete dctArray2;
+        
+        // PHASE 4 - Huffman
+        for (r = 0; r < HeightBlocks; r++)
         {
-           for (c = 0; c < MinBlockWidth; c++)
+           for (c = 0; c < WidthBlocks; c++)
            {
                xpos = c*8;
                ypos = r*8;
@@ -196,7 +196,10 @@ int JpegEncoder::jpegNaturalOrder[] =
             }
         }
         Huf.flushBuffer(outStream);
-    
+        delete dctArray3;
+        delete JpegObj; 
+        
+        JpegObj = NULL;
     }
 
      void JpegEncoder::WriteEOI() 

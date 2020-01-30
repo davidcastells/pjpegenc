@@ -19,13 +19,20 @@
  */
 
 
-	JpegInfo::~JpegInfo()
-	{
-		delete [] Components[0];
-		delete [] Components[1];
-		delete [] Components[2];
-	}
+    JpegInfo::~JpegInfo()
+    {
+        freeImage();
+    }
 	
+    void JpegInfo::freeImage()
+    {
+        if (imageobj != NULL)
+        {
+            delete imageobj;
+            imageobj = NULL;
+        }
+    }
+    
     JpegInfo::JpegInfo(Image* image)
     {
     	imageobj = image;
@@ -76,39 +83,15 @@
 
          Precision = 8;
 
-         if (verbose)
-            printf("Create Arrays\n");
-         
-         getYCCArray();
+//         if (verbose)
+//            printf("Create Arrays\n");
+//         
+//         getYCCArray();
         
-         
-    
-         
-    }
-
-    void JpegInfo::setComment(std::string comment) 
-    {
-        Comment = Comment + comment;
-    }
-
-    std::string JpegInfo::getComment() 
-    {
-        return Comment;
-    }
-
-    /**
-     * This method creates and fills three arrays, Y, Cb, Cr using the
-     * input image.
-     */
-    void JpegInfo::getYCCArray()
-    {
-        int r, g, b, y, x;
-
-        
-        MaxHsampFactor = 1;
+         MaxHsampFactor = 1;
         MaxVsampFactor = 1;
 
-        for (y = 0; y < NUMBER_OF_COMPONENTS; y++)
+        for (int y = 0; y < NUMBER_OF_COMPONENTS; y++)
         {
             MaxHsampFactor = std::max(MaxHsampFactor, HsampFactor[y]);
             MaxVsampFactor = std::max(MaxVsampFactor, VsampFactor[y]);
@@ -119,7 +102,7 @@
             printf("Sampling factor %d x %d\n", MaxHsampFactor, MaxVsampFactor);
         }
         
-        for (y = 0; y < NUMBER_OF_COMPONENTS; y++)
+        for (int y = 0; y < NUMBER_OF_COMPONENTS; y++)
         {
                 compWidth[y] = (((imageWidth%8 != 0) ? ((int) ceil((double) imageWidth/8.0))*8 : imageWidth)/MaxHsampFactor)*HsampFactor[y];
                 if (compWidth[y] != ((imageWidth/MaxHsampFactor)*HsampFactor[y])) 
@@ -139,68 +122,62 @@
                 }
                 BlockHeight[y] = (int) ceil((double) compHeight[y]/8.0);
         }
-        
-        
-    	
-        Matrix<float>* Y = new Matrix<float>(compHeight[0], compWidth[0]);
-        Matrix<float>* Cr1 = new Matrix<float>(compHeight[0], compWidth[0]);
-        Matrix<float>* Cb1 = new Matrix<float>(compHeight[0], compWidth[0]);
-        //Matrix<float>* Cb2 = new Matrix<float>(compHeight[1], compWidth[1]);
-        //Matrix<float>* Cr2 = new Matrix<float>(compHeight[2], compWidth[2]);
-        
-        Components[0] = Y;
-//        Cb2 = DownSample(Cb1, 1);
-        Components[1] = Cb1;
-//        Cr2 = DownSample(Cr1, 2);
-        Components[2] = Cr1;
-
-        int index = 0;
-        for (y = 0; y < imageHeight; ++y)
-    	{
-            for (x = 0; x < imageWidth; ++x)
-    	    {
-                imageobj->getRGB(x, y, &r, &g, &b);
-
-// The following three lines are a more correct color conversion but
-// the current conversion technique is sufficient anｄ results in a higher
-// compression rate.
-//                Y[y][x] = 16 + (float)(0.8588*(0.299 * (float)r + 0.587 * (float)g + 0.114 * (float)b ));
-//                Cb1[y][x] = 128 + (float)(0.8784*(-0.16874 * (float)r - 0.33126 * (float)g + 0.5 * (float)b));
-//                Cr1[y][x] = 128 + (float)(0.8784*(0.5 * (float)r - 0.41869 * (float)g - 0.08131 * (float)b));
-                Y->put(y, x, (float)((0.299 * (float)r + 0.587 * (float)g + 0.114 * (float)b)));
-                Cb1->put(y, x,  128 + (float)((-0.16874 * (float)r - 0.33126 * (float)g + 0.5 * (float)b)));
-                Cr1->put(y, x,  128 + (float)((0.5 * (float)r - 0.41869 * (float)g - 0.08131 * (float)b)));
-    	    }
-    	}
-
-// Need a way to set the H and V sample factors before allowing downsampling.
-// For now (04/04/98) downsampling must be hard coded.
-// Until a better downsampler is implemented, this will not be done.
-// Downsampling is currently supported.  The downsampling method here
-// is a simple box filter.
-
-        
+    
+         
     }
 
-    /*
-    float[][] DownSample(float[][] C, int comp)
+    void JpegInfo::setComment(std::string comment) 
     {
-        int inrow, incol;
-        int outrow, outcol;
-        float output[][];
-        int temp;
-        int bias;
-        inrow = 0;
-        incol = 0;
-        output = new float[compHeight[comp]][compWidth[comp]];
-        for (outrow = 0; outrow < compHeight[comp]; outrow++) {
-                bias = 1;
-                for (outcol = 0; outcol < compWidth[comp]; outcol++) {
-                        output[outrow][outcol] = (C[inrow][incol++] + C[inrow++][incol--] + C[inrow][incol++] + C[inrow--][incol++] + (float)bias)/(float)4.0;
-                        bias ^= 3;
-                }
-                inrow += 2;
-                incol = 0;
+        Comment = Comment + comment;
+    }
+
+    std::string JpegInfo::getComment() 
+    {
+        return Comment;
+    }
+
+    /**
+     * This method creates and fills three arrays, Y, Cb, Cr using the
+     * input image.
+     */
+    void JpegInfo::rgbToYCrCb(Matrix5D<float>* dctArray1)
+    {
+        int comp, r,c, b, y, x;
+        int rc, gc, bc;
+
+        
+        
+        
+        // assume they are all the same (no subsampling)
+        int MinBlockHeight = BlockHeight[0];    
+        int MinBlockWidth = BlockWidth[0];
+
+        for (comp = 0; comp < NUMBER_OF_COMPONENTS; comp++)
+        {
+           for (r = 0; r < MinBlockHeight; r++)
+            {
+               for (c = 0; c < MinBlockWidth; c++)
+               {
+                    for (y = 0; y < 8; y++)
+                    {
+                       for (x = 0; x < 8; x++)
+                       {
+                           imageobj->getRGB(x, y, &rc, &gc, &bc);
+
+                            // The following three lines are a more correct color conversion but
+                            // the current conversion technique is sufficient and results in a higher
+                            // compression rate.
+                            //                Y[y][x] = 16 + (float)(0.8588*(0.299 * (float)r + 0.587 * (float)g + 0.114 * (float)b ));
+                            //                Cb1[y][x] = 128 + (float)(0.8784*(-0.16874 * (float)r - 0.33126 * (float)g + 0.5 * (float)b));
+                            //                Cr1[y][x] = 128 + (float)(0.8784*(0.5 * (float)r - 0.41869 * (float)g - 0.08131 * (float)b));
+                            dctArray1->put(0, r, c, y, x, (float)((0.299 * (float)rc + 0.587 * (float)gc + 0.114 * (float)bc)));
+                            dctArray1->put(1, r, c, y, x,  128 + (float)((-0.16874 * (float)rc - 0.33126 * (float)gc + 0.5 * (float)bc)));
+                            dctArray1->put(2, r, c, y, x,  128 + (float)((0.5 * (float)rc - 0.41869 * (float)gc - 0.08131 * (float)bc)));
+                       }
+                    }
+               }
+           }
         }
-        return output;
-    }*/
+    }
+
+    

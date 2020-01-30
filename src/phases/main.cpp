@@ -134,7 +134,7 @@ int main(int argc, char* args[])
             CBitmap* bitmap = new CBitmap();
 
             if (bitmap->load(inputFile))
-                    printf("Loaded %s\n", inputFile);
+                printf("Loaded %s\n", inputFile);
             else
             {
                 printf("Failed to load %s\n", inputFile);

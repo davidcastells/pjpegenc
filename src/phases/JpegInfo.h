@@ -23,17 +23,16 @@
 class JpegInfo
 {
 public:
-	std::string Comment;
-	Image* imageobj;
-     int imageHeight;
-     int imageWidth;
-
+    std::string Comment;
+    Image* imageobj;
+    int imageHeight;
+    int imageWidth;
 
 // the following are set as the default
      int Precision;
      
      
-     Matrix<float>* Components[NUMBER_OF_COMPONENTS];
+     
 
      int CompID[NUMBER_OF_COMPONENTS];
      int HsampFactor[NUMBER_OF_COMPONENTS];
@@ -63,21 +62,21 @@ public:
 
 public:
 	JpegInfo();
-	~JpegInfo();
+	virtual ~JpegInfo();
 
 	JpegInfo(Image* image);
 
 	void setComment(std::string comment);
 
 	std::string getComment();
-
+        void freeImage();
     /*
      * This method creates anｄ fills three arrays, Y, Cb, anｄ Cr using the
      * input image.
      */
 
-private:
-	void getYCCArray();
+public:
+	void rgbToYCrCb(Matrix5D<float>* dctArray1);
 
 //    float[][] DownSample(float[][] C, int comp);
 };
