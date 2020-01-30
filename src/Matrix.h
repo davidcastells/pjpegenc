@@ -23,6 +23,11 @@ public:
 		m_h = h;
 		m_data = new T[w*h];
 	}
+        
+        virtual ~Matrix()
+        {
+            delete[] m_data;
+        }
 	
 	T get(int y, int x)
 	{
@@ -56,6 +61,11 @@ public:
 		
             m_data = new T[d1*d2*d3*d4];
 	}
+        
+        virtual ~Matrix4D()
+        {
+            delete[] m_data;
+        }
 	
 	T get(int i1, int i2, int i3, int i4)
 	{
@@ -95,6 +105,11 @@ public:
             
             m_data = new T[d1*d2*d3*d4*d5];
 	}
+        
+        virtual ~Matrix5D()
+        {
+            delete[] m_data;
+        }
 	
 	T get(int i1, int i2, int i3, int i4, int i5)
 	{
