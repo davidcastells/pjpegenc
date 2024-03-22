@@ -21,9 +21,10 @@
 
 	JpegInfo::~JpegInfo()
 	{
-		delete [] Components[0];
-		delete [] Components[1];
-		delete [] Components[2];
+            
+            delete  Components[0];
+            delete  Components[1];
+            delete  Components[2];
 	}
 	
     JpegInfo::JpegInfo(Image* image)
@@ -80,10 +81,6 @@
             printf("Create Arrays\n");
          
          getYCCArray();
-        
-         
-    
-         
     }
 
     void JpegInfo::setComment(std::string comment) 
