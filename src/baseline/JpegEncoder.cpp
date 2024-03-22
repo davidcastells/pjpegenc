@@ -47,14 +47,6 @@ int JpegEncoder::jpegNaturalOrder[] =
      */
     JpegEncoder::JpegEncoder(Image* image, int quality, OutputStream* out)
     {
-//                MediaTracker tracker = new MediaTracker(null);
-//                tracker.addImage(image, 0);
-//                try {
-//                        tracker.waitForID(0);
-//                }
-//                catch (InterruptedException e) {
-//// Got to do something?
-//                }
 
         /*
         * Quality of the image.
@@ -77,9 +69,9 @@ int JpegEncoder::jpegNaturalOrder[] =
     }
     
     JpegEncoder::~JpegEncoder()
-    {
-    	    delete JpegObj;
-    	    delete m_outStream;
+    { 
+        delete JpegObj;
+        delete m_outStream;
     }
 
      void JpegEncoder::setQuality(int quality) {
@@ -92,9 +84,16 @@ int JpegEncoder::jpegNaturalOrder[] =
 
      void JpegEncoder::Compress() 
     {
+        if (verbose) printf("WriteHeaders\n");
         WriteHeaders();
+
+        if (verbose) printf("WriteCompressedData\n");
         WriteCompressedData();
+
+        if (verbose) printf("WriteEOI\n");
         WriteEOI();
+
+        if (verbose) printf("Flush\n");
         m_outStream->flush();
     }
 
