@@ -23,8 +23,8 @@
 class JpegInfo
 {
 public:
-	std::string Comment;
-	Image* imageobj;
+    std::string Comment;
+    Image* imageobj;
      int imageHeight;
      int imageWidth;
 
