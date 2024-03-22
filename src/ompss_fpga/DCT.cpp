@@ -18,17 +18,15 @@
 // library.
 
 // Static variables
-int DCT_QUALITY;
+int DCT_QUALITY = 80;
 int DCT_quantum[2][N*N];
-int* DCT_quantum_luminance;
-int* DCT_quantum_chrominance;
+int* DCT_quantum_luminance = &DCT_quantum[0][0];
+int* DCT_quantum_chrominance = &DCT_quantum[1][0];
 
 BIGFP DCT_Divisors[2][N*N];
 
-BIGFP* DCT_DivisorsLuminance;
-BIGFP* DCT_DivisorsChrominance;
-
-
+BIGFP* DCT_DivisorsLuminance = &DCT_Divisors[0][0];
+BIGFP* DCT_DivisorsChrominance = &DCT_Divisors[1][0];
 
 
 
@@ -45,14 +43,9 @@ BIGFP* DCT_DivisorsChrominance;
      */
     void DCT_DCT()
     { 
-    	   // Image Quality (0-100) - default 80 (good image / good compression)
-    	   DCT_QUALITY = 80;
-    
-    	   DCT_quantum_luminance = &DCT_quantum[0][0];
-    	   DCT_quantum_chrominance = &DCT_quantum[1][0];
+        if (verbose) printf("DCT\n");
 
-    	    DCT_DivisorsLuminance = &DCT_Divisors[0][0];
-    	    DCT_DivisorsChrominance = &DCT_Divisors[1][0];
+    	   // Image Quality (0-100) - default 80 (good image / good compression)
 
     }
     
