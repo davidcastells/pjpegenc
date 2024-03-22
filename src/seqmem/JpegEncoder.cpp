@@ -47,7 +47,7 @@ int JpegEncoder::jpegNaturalOrder[] =
      */
     JpegEncoder::JpegEncoder(Image* image, int quality, OutputStream* out)
     {
-
+        DCT_DCT();
         /*
         * Quality of the image.
         * 0 to 100 anｄ from bad image quality, high compression to good
@@ -85,8 +85,11 @@ int JpegEncoder::jpegNaturalOrder[] =
 
      void JpegEncoder::Compress() 
     {
+        if (verbose) printf("Headers\n");
         WriteHeaders();
+        if (verbose) printf("Compress\n");
         WriteCompressedData();
+        if (verbose) printf("WriteEOI\n");
         WriteEOI();
         m_outStream->flush();
     }
