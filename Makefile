@@ -27,3 +27,9 @@ phases_clean:
 
 opencl_fpga_s1_clean:
 	$(MAKE) -C src/opencl_fpga_s1 clean
+
+ompss_fpga:
+	$(MAKE) -C src/ompss_fpga
+
+ompss_fpga_clean:
+	$(MAKE) -C src/ompss_fpga clean
