@@ -36,9 +36,9 @@ void usage()
     printf("  -o\tOutput Bitmap (.JPG) File\n");
     printf("  -m\tUse embedded static input image\n");
     printf("  -n\tWrite output to internal static array\n");
-    printf("  -v\tVerbose output");
-    printf("  -t\tMeasure time");
-    printf("  -p\tMeasure power");
+    printf("  -v\tVerbose output\n");
+    printf("  -t\tMeasure time\n");
+    printf("  -p\tMeasure power\n");
     printf("\n");
 }
 
